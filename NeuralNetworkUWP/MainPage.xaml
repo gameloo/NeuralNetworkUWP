@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="NeuralNetworkUWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NeuralNetworkUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <RelativePanel Grid.Row="0" Margin="10">
+            <TextBlock x:Name="Topic"  FontSize="32" TextWrapping="Wrap" Text="Тема практической работы:"/>
+
+            <TextBlock x:Name="Theme" FontSize="32" RelativePanel.Below="Topic" Text="Разработка программной реализации одной из базовых технологий систем исскусственного интелекта" TextWrapping="Wrap" TextAlignment="Center" TextDecorations="Underline"/>
+
+            <TextBlock x:Name="FullName" TextWrapping="Wrap" FontSize="32" RelativePanel.Below="Theme" RelativePanel.AlignRightWith="Theme" Margin="0,150,0,0">
+            <Run Text="Выполнил студент группы: ИН-151"/>
+            <LineBreak/>
+            <Run Text="Фёдоров Павел Владимирович"/>
+            </TextBlock>
+            
+        </RelativePanel>
+        <Button x:Name="BtnNext" Content="Далее" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Height="35" Width="150" Margin="10" Click="BtnNext_Click"/>
+    </Grid>
+</Page>

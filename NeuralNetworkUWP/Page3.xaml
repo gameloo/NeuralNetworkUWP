@@ -1,0 +1,62 @@
+﻿<Page
+    x:Class="NeuralNetworkUWP.Page3"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NeuralNetworkUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <RelativePanel Grid.Row="0" Margin="10">
+            <TextBlock x:Name="Topic" Text="Шаг 3: Конфигурирование нейронной сети" FontSize="32" FontWeight="SemiBold"/>
+            <TextBlock x:Name="TitleHidden" Text="Настройка скрытых слоев" FontSize="28" RelativePanel.Below="Topic" Margin="5"/>
+            <TextBox x:Name="BoxHidden" RelativePanel.Below="TitleHidden" Width="150" Height="35" Tapped="BoxHidden_Tapped">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout x:Name="dialogHelpHidden">
+                        <StackPanel Width="375">
+                            <TextBlock Text="Задается в следующем виде: (кол-во нейронов (i-слой));(кол-во нейронов (i+1))" TextWrapping="Wrap"/>
+                            <TextBlock Text="Например: 12;4;10 (12 нейронов на 1-м скрытом слое, 4 - на втором, 10 - на третьем.)" TextWrapping="Wrap"/>
+                            <Button x:Name="BtnCloseHelpHidden" Content="OK" Click="ButtonCloseDialog_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </TextBox>
+
+            <TextBlock Text="Количество нейронов в скрытых слоях" RelativePanel.Below="TitleHidden" RelativePanel.RightOf="BoxHidden" RelativePanel.AlignVerticalCenterWith="BoxHidden" TextWrapping="Wrap"  Margin="10"/>
+            
+            <TextBlock x:Name="TitleHyper" Text="Настройка гиперпараметров" FontSize="28" RelativePanel.Below="BoxHidden" Margin="5"/>
+            <TextBox x:Name="BoxAlpha" RelativePanel.Below="TitleHyper" Width="75" Height="35" Margin="0,10" Tapped="BoxAlpha_Tapped" >
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout x:Name="dialogHelpAlpha">
+                        <StackPanel Width="375">
+                            <TextBlock Text="Увеличение момента обучения α (альфа) может привести как к увеличению, так и к уменьшению времени сходимости, в зависимости от формы поверхности ошибки." TextWrapping="Wrap"/>
+                            <Button x:Name="BtnCloseHelpAlpha" Content="OK" Click="ButtonCloseDialog_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </TextBox>
+            <TextBlock Text="Момент обучения (Альфа)" RelativePanel.Below="TitleHyper" RelativePanel.RightOf="BoxAlpha" RelativePanel.AlignVerticalCenterWith="BoxAlpha" TextWrapping="Wrap"  Margin="10"/>
+            
+            <TextBox x:Name="BoxEps" RelativePanel.Below="BoxAlpha" Width="75" Height="35" Margin="0,10" Tapped="BoxEps_Tapped">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout x:Name="dialogHelpEps">
+                        <StackPanel Width="375">
+                            <TextBlock Text="Выбор низкой скорости обучения E (эпсилон) увеличит время схождения, но еще и уменьшит вероятность паралича сети." TextWrapping="Wrap"/>
+                            <Button x:Name="BtnCloseHelpEps" Content="OK" Click="ButtonCloseDialog_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </TextBox>
+            <TextBlock Text="Скорость обучения (Эпсилон)" RelativePanel.Below="BoxAlpha" RelativePanel.RightOf="BoxEps" RelativePanel.AlignVerticalCenterWith="BoxEps" TextWrapping="Wrap"  Margin="10"/>
+
+        </RelativePanel>
+        <Button x:Name="BtnNext" Content="Далее" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Height="35" Width="150" Margin="10" Click="BtnNext_Click"/>
+
+    </Grid>
+</Page>
