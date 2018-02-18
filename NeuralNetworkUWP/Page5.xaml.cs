@@ -69,13 +69,13 @@ namespace NeuralNetworkUWP
                 }
 
                 BoxOut.Text = answerString;
-            }
+        }
             catch
             {
                 BoxIn.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 return;
             }
-        }
+}
 
         private async void BtnSave_Click(object sender, RoutedEventArgs e)
         {

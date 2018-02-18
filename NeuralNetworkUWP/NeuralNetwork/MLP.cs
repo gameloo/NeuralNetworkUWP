@@ -84,9 +84,6 @@ namespace NeuralNetworkUWP.NeuralNetwork
             calculate();
             double[] answerArray = new double[sizeOUT];
             answerArray = layerPerceptron[layerPerceptron.Length - 1].AxonLayer;
-            for (int i = 0; i < sizeOUT; i++)
-                lock (locker)
-                    LogString.Add((i + 1).ToString() + "-й выход нейронной сети: " + (answerArray[i].ToString()) + "\n");
             return answerArray;
         }
 

@@ -54,8 +54,8 @@ namespace NeuralNetworkUWP
                 await Task.Run(async () =>
                  {
                      //var stringReader = new StringReader(System.IO.File.ReadAllText(file.Path));
-                     string strinf = await FileIO.ReadTextAsync(file);
-                     var stringReader = new StringReader(strinf);
+                     string tempString = await FileIO.ReadTextAsync(file);
+                     var stringReader = new StringReader(tempString);
                      //return (T)xmlSerializer.Deserialize(stringReader);
                      //var stringReader = await FileIO.ReadTextAsync(file);
                      network = (MLP)xmlSerializer.Deserialize(stringReader);
