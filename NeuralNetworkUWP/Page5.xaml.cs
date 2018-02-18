@@ -81,7 +81,7 @@ namespace NeuralNetworkUWP
         {
             FileSavePicker fileSavePicker = new FileSavePicker();
             fileSavePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            fileSavePicker.FileTypeChoices.Add("Plain Text", new List<string> { ".mlp" });
+            fileSavePicker.FileTypeChoices.Add("Neural Network", new List<string> { ".mlp" });
             fileSavePicker.SuggestedFileName = "NewNeuralNetwork";
             fileSavePicker.CommitButtonText = "Сохранить";
 

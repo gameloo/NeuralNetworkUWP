@@ -53,13 +53,14 @@ namespace NeuralNetworkUWP
                 var xmlSerializer = new XmlSerializer(typeof(MLP));
                 await Task.Run(async () =>
                  {
-                     //var stringReader = new StringReader(System.IO.File.ReadAllText(file.Path));
-                     string tempString = await FileIO.ReadTextAsync(file);
-                     var stringReader = new StringReader(tempString);
-                     //return (T)xmlSerializer.Deserialize(stringReader);
-                     //var stringReader = await FileIO.ReadTextAsync(file);
+                     string serializedMLP = await FileIO.ReadTextAsync(file);
+                     var stringReader = new StringReader(serializedMLP);
                      network = (MLP)xmlSerializer.Deserialize(stringReader);
                  });
+                TbNumIN.Text = network.sizeIN.ToString();
+                TbNumOUT.Text = network.sizeOUT.ToString();
+                TbNumHidden.Text = network.GetHiddenLayersInfo();
+
                 BtnNext.IsEnabled = true;
             }
         }

@@ -149,6 +149,18 @@ namespace NeuralNetworkUWP.NeuralNetwork
                 return returnSring;
             }
         }
+
+        public string GetHiddenLayersInfo()
+        {
+            string numberHiddenPerceptron = "";
+
+            for (int i = 0; i < layerPerceptron.Length - 1; i++)
+            {
+                numberHiddenPerceptron += layerPerceptron[i].perceptron.Length.ToString();
+                if (i != layerPerceptron.Length - 2) numberHiddenPerceptron += ";";
+            }
+            return numberHiddenPerceptron;
+        }
     }
 }
 
