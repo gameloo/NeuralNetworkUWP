@@ -18,7 +18,9 @@
             <TextBlock x:Name="Topic" Text="Шаг 4: Обучение нейронной сети" FontSize="32" FontWeight="SemiBold"/>
             <TextBlock x:Name="TitleLog" Text="LOG: " FontSize="28" RelativePanel.Below="Topic" Margin="5"/>
         </RelativePanel>
-        <TextBox x:Name="BoxLog" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        <Button x:Name="BtnNext" Content="Далее" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Height="35" Width="150" Margin="10" Click="BtnNext_Click"/>
+        <ListBox x:Name="BoxLog" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.BringIntoViewOnFocusChange="True"/>
+        
+        <CheckBox x:Name="ChBoxAutoScroll" Content="Auto Scroll" Grid.Row="2" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="True"/>
+        <Button x:Name="BtnNext" Content="Далее" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Height="35" Width="150" Margin="10" Click="BtnNext_Click" IsEnabled="False"/>
     </Grid>
 </Page>
