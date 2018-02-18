@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using NeuralNetworkUWP.NeuralNetwork;
 using System.Xml.Serialization;
+using System.Threading.Tasks;
+using Windows.Storage;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -49,8 +51,15 @@ namespace NeuralNetworkUWP
             if (file != null)
             {
                 var xmlSerializer = new XmlSerializer(typeof(MLP));
-                var stringReader = new StringReader(System.IO.File.ReadAllText(file.Path));
-                network = (MLP)xmlSerializer.Deserialize(stringReader);
+                await Task.Run(async () =>
+                 {
+                     //var stringReader = new StringReader(System.IO.File.ReadAllText(file.Path));
+                     string strinf = await FileIO.ReadTextAsync(file);
+                     var stringReader = new StringReader(strinf);
+                     //return (T)xmlSerializer.Deserialize(stringReader);
+                     //var stringReader = await FileIO.ReadTextAsync(file);
+                     network = (MLP)xmlSerializer.Deserialize(stringReader);
+                 });
                 BtnNext.IsEnabled = true;
             }
         }
