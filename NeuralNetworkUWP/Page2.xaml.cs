@@ -34,18 +34,28 @@ namespace NeuralNetworkUWP
 
         private async void BtnOpen_Click(object sender, RoutedEventArgs e)
         {
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.Desktop;
-            openPicker.CommitButtonText = "Открыть";
-            openPicker.FileTypeFilter.Add(".csv");
-            var file = await openPicker.PickSingleFileAsync();
-            if (file != null)
+            try
             {
-                await Task.Run(() => { dataToTrain = new DataToTrain(file); });
-                TbNumIN.Text = dataToTrain.SizeIn.ToString();
-                TbNumOUT.Text = dataToTrain.SizeOut.ToString();
-                BtnNext.IsEnabled = true;
+                FileOpenPicker openPicker = new FileOpenPicker();
+                openPicker.ViewMode = PickerViewMode.Thumbnail;
+                openPicker.SuggestedStartLocation = PickerLocationId.Desktop;
+                openPicker.CommitButtonText = "Открыть";
+                openPicker.FileTypeFilter.Add(".csv");
+                var file = await openPicker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    await Task.Run(() => { dataToTrain = new DataToTrain(file); });
+                    TbNumIN.Text = dataToTrain.SizeIn.ToString();
+                    TbNumOUT.Text = dataToTrain.SizeOut.ToString();
+                    BtnNext.IsEnabled = true;
+                }
+                TbError.Text = "Нет";
+            }
+            catch
+            {
+                TbError.Text = "Ошибка при загрузке файла";
+                BtnNext.IsEnabled = false;
+                return;
             }
         }
     }

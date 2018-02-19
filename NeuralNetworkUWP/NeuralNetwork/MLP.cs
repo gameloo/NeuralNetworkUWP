@@ -134,10 +134,10 @@ namespace NeuralNetworkUWP.NeuralNetwork
                     error += calculateError(i);
                 }
                 lock (locker)
-                    LogString.Add("Итерация:" + counter.ToString() + " размер ошибки: " + error.ToString() + "\n");
+                    LogString.Add("Эпоха: " + counter.ToString() + " размер ошибки: " + error.ToString() + "\n");
             }
             lock (locker)
-                LogString.Add("Нейронная сеть успешно обучилась за " + counter.ToString() + " итераций.\n");
+                LogString.Add("Нейронная сеть успешно обучилась за " + counter.ToString() + " эпох.\n");
         }
 
         public string[] GetLogInfo()

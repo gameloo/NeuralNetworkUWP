@@ -61,10 +61,8 @@ namespace NeuralNetworkUWP
 
                 if (logStringArr.Length != 0)
                 {
-                    string logString = "";
                     for (int i = 0; i < logStringArr.Length; i++)
                     {
-                        logString += logStringArr[i];
                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
                             () =>
                          {
@@ -72,7 +70,6 @@ namespace NeuralNetworkUWP
                              if(ChBoxAutoScroll.IsChecked == true) BoxLog.ScrollIntoView(BoxLog.Items.Last());
                          });
                     }
-                    Log.write(logString);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(0.1));
             }
