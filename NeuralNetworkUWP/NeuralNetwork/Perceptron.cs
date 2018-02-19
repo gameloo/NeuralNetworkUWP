@@ -48,7 +48,7 @@ namespace NeuralNetworkUWP.NeuralNetwork
         private double Sigmoid(double x)
         {
             double expValue;
-            expValue = Math.Exp((double)-x);
+            expValue = Math.Exp(x*(-1));
             return 1 / (1 + expValue);
         }
 
