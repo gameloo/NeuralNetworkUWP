@@ -10,45 +10,24 @@ namespace NeuralNetworkUWP
 {
     static class Log
     {
-        static object locker = new object();
         static StorageFile logFile;
         public static async void write(string msg)
         {
-                DateTime currtime = DateTime.Now;
-                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            DateTime currtime = DateTime.Now;
+            try
+            {
+                StorageFolder localFolder = await DownloadsFolder.CreateFolderAsync("Log");
             if (logFile == null)
                 logFile = await localFolder.CreateFileAsync("log.txt", CreationCollisionOption.ReplaceExisting);
             else logFile = await localFolder.GetFileAsync("log.txt");
+            string tempTxt = String.Format("{0:yyMMdd hh:mm:ss}\n{1}", currtime, msg);
+            await FileIO.AppendTextAsync(logFile, tempTxt);
+            }
+            catch 
+            {
 
-            await FileIO.AppendTextAsync(logFile, msg);
+            }
 
-        }
-        public static void delete()
-        {
-            if (System.IO.File.Exists(@"log.txt"))
-            {
-                System.IO.File.Delete(@"log.txt");
-            }
-        }
-        public static void rename()
-        {
-            if (System.IO.File.Exists(@"log.txt"))
-            {
-                try
-                {
-                    DateTime currtime = DateTime.Now;
-                    string txt = String.Format("{0:yyMMddhhmmss}", currtime);
-                    System.IO.File.Move(@"log.txt", @"log" + txt + ".txt");
-                }
-                catch { }
-            }
-        }
-        public static string getLog()
-        {
-            lock (locker)
-            {
-                return System.IO.File.ReadAllText(@"log.txt");
-            }
         }
     }
 }
