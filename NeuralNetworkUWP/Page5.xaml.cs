@@ -51,7 +51,7 @@ namespace NeuralNetworkUWP
                 for (int i = 0; i < tempString.Length; i++)
                     question[i] = Convert.ToDouble(tempString[i]);
 
-                double[] answer = network.calculate(question);
+                double[] answer = network.Calculate(question);
                 string answerString = "";
 
                 for (int i = 0; i < answer.Length; i++)

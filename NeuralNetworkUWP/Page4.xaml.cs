@@ -32,7 +32,7 @@ namespace NeuralNetworkUWP
         {
             if (e.Parameter != null)
                 network = (MLP)e.Parameter;
-            threadLearning = new Task(() => network.learning());
+            threadLearning = new Task(() => network.Learning());
             threadLearning.Start();
             Task.Run(() => LoopLog());
 

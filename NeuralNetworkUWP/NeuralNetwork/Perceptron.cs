@@ -28,57 +28,55 @@ namespace NeuralNetworkUWP.NeuralNetwork
 
         public Perceptron() { }
 
-        public Perceptron(int _numberOfDendrites)
+        public Perceptron(int numberOfDendrites)
         {
             Random rand = new Random((int)DateTime.Now.Ticks);
-            weightDendrite = new double[_numberOfDendrites];
+            weightDendrite = new double[numberOfDendrites];
             for (int i = 0; i < weightDendrite.Length; i++)
             {
                 weightDendrite[i] = rand.Next(-100, 100) * 0.01;
             }
             activWeight = rand.Next(-100, 100) * 0.01;
-            AxonTerminal = new double[_numberOfDendrites];
-            deltaWeight = new double[_numberOfDendrites + 1];
+            AxonTerminal = new double[numberOfDendrites];
+            deltaWeight = new double[numberOfDendrites + 1];
             for (int i = 0; i < deltaWeight.Length; i++)
             {
                 deltaWeight[i] = 0;
             }
-            Alpha = 0.3;
-            Epsilon = 0.3;
         }
 
-        private double sigmoid(double _x)
+        private double Sigmoid(double x)
         {
             double expValue;
-            expValue = Math.Exp((double)-_x);
+            expValue = Math.Exp((double)-x);
             return 1 / (1 + expValue);
         }
 
-        public void calculateAxon()
+        public void CalculateAxon()
         {
             Axon = 0;
             for (int i = 0; i < weightDendrite.Length; i++)
                 Axon += weightDendrite[i] * AxonTerminal[i];
             Axon += activWeight;
-            Axon = sigmoid(Axon);
+            Axon = Sigmoid(Axon);
         }
 
-        public void calcDeltaOUT(double _idealAnswer)
+        public void CalcDeltaOUT(double idealAnswer)
         {
-            delta = (_idealAnswer - Axon) * (1 - Axon) * Axon;
+            delta = (idealAnswer - Axon) * (1 - Axon) * Axon;
         }
 
-        public void calcDeltaHIDDEN(double _summDelta)
+        public void CalcDeltaHIDDEN(double summDelta)
         {
-            delta = (1 - Math.Pow(Axon, 2)) * _summDelta;
+            delta = (1 - Math.Pow(Axon, 2)) * summDelta;
         }
 
-        private double GRAD(int _indexAxonTerminal)
+        private double GRAD(int indexAxonTerminal)
         {
-            return delta * AxonTerminal[_indexAxonTerminal];
+            return delta * AxonTerminal[indexAxonTerminal];
         }
 
-        public void changeWeight()
+        public void ChangeWeight()
         {
             for (int i = 0; i < weightDendrite.Length; i++)
             {
@@ -89,9 +87,9 @@ namespace NeuralNetworkUWP.NeuralNetwork
             activWeight = activWeight + deltaWeight[weightDendrite.Length];
         }
 
-        public double getMultiplyDeltaWeight(int _index)
+        public double GetMultiplyDeltaWeight(int index)
         {
-            return weightDendrite[_index] * delta;
+            return weightDendrite[index] * delta;
         }
     }
 }

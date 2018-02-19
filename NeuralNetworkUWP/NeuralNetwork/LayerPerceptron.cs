@@ -18,13 +18,13 @@ namespace NeuralNetworkUWP.NeuralNetwork
 
         public LayerPerceptron() { }
 
-        public LayerPerceptron(int _numberOfPerceptrons, int _numberOfPerceptronsOnPreviousLayer)
+        public LayerPerceptron(int numberOfPerceptrons, int numberOfPerceptronsOnPreviousLayer)
         {
-            perceptron = new Perceptron[_numberOfPerceptrons];
+            perceptron = new Perceptron[numberOfPerceptrons];
             for (int i = 0; i < perceptron.Length; i++)
-                perceptron[i] = new Perceptron(_numberOfPerceptronsOnPreviousLayer);
-            AxonOnPreviousLayer = new double[_numberOfPerceptronsOnPreviousLayer];
-            SummMultiply = new double[_numberOfPerceptronsOnPreviousLayer];
+                perceptron[i] = new Perceptron(numberOfPerceptronsOnPreviousLayer);
+            AxonOnPreviousLayer = new double[numberOfPerceptronsOnPreviousLayer];
+            SummMultiply = new double[numberOfPerceptronsOnPreviousLayer];
         }
 
         public double Alpha
@@ -54,46 +54,46 @@ namespace NeuralNetworkUWP.NeuralNetwork
             }
         }
 
-        public void calculateAxonOfLayer()
+        public void CalculateAxonOfLayer()
         {
             for (int i = 0; i < perceptron.Length; i++)
             {
                 perceptron[i].AxonTerminal = AxonOnPreviousLayer;
-                perceptron[i].calculateAxon();
+                perceptron[i].CalculateAxon();
             }
         }
 
-        public void learningOutput(double[] _idealAnswer)
+        public void LearningOutput(double[] idealAnswer)
         {
             for (int i = 0; i < perceptron.Length; i++)
             {
-                perceptron[i].calcDeltaOUT(_idealAnswer[i]);
-                perceptron[i].changeWeight();
+                perceptron[i].CalcDeltaOUT(idealAnswer[i]);
+                perceptron[i].ChangeWeight();
             }
-            setSummMultiply();
+            SetSummMultiply();
         }
 
-        public void learningHidden(double[] _summMultiply)
+        public void LearningHidden(double[] summMultiply)
         {
             for (int i = 0; i < perceptron.Length; i++)
             {
-                perceptron[i].calcDeltaHIDDEN(_summMultiply[i]);
-                perceptron[i].changeWeight();
+                perceptron[i].CalcDeltaHIDDEN(summMultiply[i]);
+                perceptron[i].ChangeWeight();
             }
-            setSummMultiply();
+            SetSummMultiply();
         }
 
-        private void setSummMultiply()
+        private void SetSummMultiply()
         {
             for (int i = 0; i < AxonOnPreviousLayer.Length; i++)
-                SummMultiply[i] = calculateSummMultiply(i);
+                SummMultiply[i] = CalculateSummMultiply(i);
         }
 
-        private double calculateSummMultiply(int _index)
+        private double CalculateSummMultiply(int index)
         {
             double returnValue = 0;
             for (int i = 0; i < perceptron.Length; i++)
-                returnValue += perceptron[i].getMultiplyDeltaWeight(_index);
+                returnValue += perceptron[i].GetMultiplyDeltaWeight(index);
             return returnValue;
         }
     }
