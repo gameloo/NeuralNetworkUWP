@@ -47,7 +47,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3.Neuron
 
             for (int i = 0; i < nInput; i++)
             {
-                Synapse[i] = randDouble.NextDouble() - 0.5;
+                Synapse[i] = randDouble.NextDouble()*2 - 0.5;
                 Task.Delay(TimeSpan.FromTicks(randDouble.Next(1, 100)));
 
                 deltaSynapse[i] = 0;

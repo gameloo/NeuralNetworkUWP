@@ -28,7 +28,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
         public LayerNeuron() { }
 
         public abstract double[] GetOutputSignal(); // Пофиксить, м.б. использовать интерфейс?
-        
+
     }
 
     public class HiddenLayer : LayerNeuron
@@ -38,24 +38,42 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         public HiddenLayer() : base() { }
 
-        public HiddenLayer(int size, int sizePrevious, object previousLayer, object nextLayer, double eps, double alpha)
+        public HiddenLayer(int size, double eps, double alpha)
         {
             Epsilon = eps;
             Alpha = alpha;
             Size = size;
+            Neuron = new HiddenNeuron[size];
+        }
+
+        public void ConfigureNeurons(object previousLayer, object nextLayer)
+        {
             this.previousLayer = previousLayer;
             this.nextLayer = nextLayer;
-            Neuron = new HiddenNeuron[size];
-            for (int i = 0; i < size; i++)
+
+            int sizePrevious;
+            Type typePreviousLayer = this.previousLayer.GetType();
+            if (typePreviousLayer.Equals(typeof(HiddenLayer)))
+            {
+                var tempLayer = (HiddenLayer)previousLayer;
+                sizePrevious = tempLayer.Size;
+            }
+            else
+            {
+                var tempLayer = (InLayer)previousLayer;
+                sizePrevious = tempLayer.Size;
+            }
+
+            for (int i = 0; i < Size; i++)
                 Neuron[i] = new HiddenNeuron(sizePrevious, i, nextLayer);
         }
 
-        public override double[] GetOutputSignal() 
+        public override double[] GetOutputSignal()
         {
             double[] returnSignal = new double[Size];
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
-                returnSignal[i] = Neuron[i].Axon; 
+                returnSignal[i] = Neuron[i].Axon;
             }
             return returnSignal;
         }
@@ -63,9 +81,12 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         public double[] Calculate()
         {
+            Type typePreviousLayer = previousLayer.GetType();
+            Type typeNextLayer = nextLayer.GetType();
+
             for (int i = 0; i < Size; i++)
             {
-                if (nextLayer.Equals(typeof(HiddenLayer)))
+                if (typePreviousLayer.Equals(typeof(HiddenLayer)))
                 {
                     var tempLayer = (HiddenLayer)previousLayer;
                     Neuron[i].Input = tempLayer.GetOutputSignal();
@@ -78,7 +99,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
                 Neuron[i].Calculate();
             }
 
-            if (nextLayer.Equals(typeof(HiddenLayer)))
+            if (typeNextLayer.Equals(typeof(HiddenLayer)))
             {
                 var tempLayer = (HiddenLayer)nextLayer;
                 return tempLayer.Calculate();
@@ -92,39 +113,58 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         public void Learning()
         {
-            for (int i =0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 Neuron[i].Learning();
             }
+
+            Type typePreviousLayer = previousLayer.GetType();
+            if (typePreviousLayer.Equals(typeof(HiddenLayer)))
+            {
+                var tempLayer = (HiddenLayer)previousLayer;
+                tempLayer.Learning();
+            }
+            else
+            {
+                var tempLayer = (InLayer)previousLayer;
+                tempLayer.Learning();
+            }
         }
-    } 
+    }
 
 
-    public class InLayer :LayerNeuron
+    public class InLayer : LayerNeuron
     {
         [XmlArrayItem("InNeuron")]
         public InNeuron[] Neuron { get; private set; }
 
         public InLayer() : base() { }
 
-        public InLayer(int size, object nextLayer, double eps, double alpha)
+        public InLayer(int size, double eps, double alpha)
         {
             Epsilon = eps;
             Alpha = alpha;
             Size = size;
-            this.nextLayer = nextLayer;
             Neuron = new InNeuron[size];
-            for (int i = 0; i < size; i++)
+        }
+
+        public void ConfigureNeurons(object nextLayer)
+        {
+            this.nextLayer = nextLayer;
+            for (int i = 0; i < Size; i++)
                 Neuron[i] = new InNeuron(i, nextLayer);
         }
 
-        public double[] Calculate (double[] inputSignal)
+        public double[] Calculate(double[] inputSignal)
         {
+            Type typeNextLayer = nextLayer.GetType();
+
             for (int i = 0; i < Neuron.Length; i++)
             {
                 Neuron[i].Calculate(inputSignal[i]);
             }
-            if (nextLayer.Equals(typeof(HiddenLayer)))
+
+            if (typeNextLayer.Equals(typeof(HiddenLayer)))
             {
                 var tempLayer = (HiddenLayer)nextLayer;
                 return tempLayer.Calculate();
@@ -161,15 +201,33 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         public OutLayer() : base() { }
 
-        public OutLayer(int size, int nPreviousNeurons, object previousLayer, double eps, double alpha)
+        public OutLayer(int size, double eps, double alpha)
         {
             Epsilon = eps;
             Alpha = alpha;
             Size = size;
-            this.previousLayer = previousLayer;
             Neuron = new OutNeuron[size];
-            for (int i = 0; i < size; i++)
-                Neuron[i] = new OutNeuron(nPreviousNeurons, i); // Добавить указатель на предыдущий слой, но смысл?
+        }
+
+        public void ConfigureNeurons(object previousLayer)
+        {
+            this.previousLayer = previousLayer;
+
+            Type typePreviousLayer = previousLayer.GetType();
+            int sizePrevious;
+            if (typePreviousLayer.Equals(typeof(HiddenLayer)))
+            {
+                var tempLayer = (HiddenLayer)previousLayer;
+                sizePrevious = tempLayer.Size;
+            }
+            else
+            {
+                var tempLayer = (InLayer)previousLayer;
+                sizePrevious = tempLayer.Size;
+            }
+
+            for (int i = 0; i < Size; i++)
+                Neuron[i] = new OutNeuron(sizePrevious, i);
         }
 
         public override double[] GetOutputSignal()
@@ -184,9 +242,10 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         public double[] Calculate()
         {
+            Type typePreviousLayer = previousLayer.GetType();
             for (int i = 0; i < Size; i++)
             {
-                if (nextLayer.Equals(typeof(HiddenLayer)))
+                if (typePreviousLayer.Equals(typeof(HiddenLayer)))
                 {
                     var tempLayer = (HiddenLayer)previousLayer;
                     Neuron[i].Input = tempLayer.GetOutputSignal();
@@ -204,8 +263,23 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         public void Learning(double[] idealAnswer)
         {
+
             for (int i = 0; i < Size; i++)
                 Neuron[i].Learning(idealAnswer[i]);
+
+            Type typePreviousLayer = previousLayer.GetType();
+            if (typePreviousLayer.Equals(typeof(HiddenLayer)))
+            {
+                var tempLayer = (HiddenLayer)previousLayer;
+                tempLayer.Learning();
+            }
+            else
+            {
+                var tempLayer = (InLayer)previousLayer;
+                tempLayer.Learning();
+            }
+
+
         }
 
 

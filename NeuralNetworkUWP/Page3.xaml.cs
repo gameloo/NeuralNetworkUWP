@@ -78,6 +78,7 @@ namespace NeuralNetworkUWP
                 BoxError.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
                 return;
             }
+            
             Frame.Navigate(typeof(Page4), network);
         }
 

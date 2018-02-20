@@ -44,32 +44,74 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
             sizeIN = dataToTrain.SizeIn;
             sizeOUT = dataToTrain.SizeOut;
 
-            hiddenLayer = new HiddenLayer[sizeHidden.Length];
-            inLayer = new InLayer(sizeIN, hiddenLayer[0], eps, alpha);
+            LogString = new List<string>();
 
-            for (int i = 0, j = -1, q = 1; i < hiddenLayer.Length; i++, j++, q++)
+            inLayer = new InLayer(sizeIN, eps, alpha);
+            if (sizeHidden != null)
             {
-                if (i == 0)
-                {
-                    if (hiddenLayer.Length == 1)
-                    {
-                        hiddenLayer[i] = new HiddenLayer(sizeHidden[i], sizeIN, inLayer, outLayer, eps, alpha);
-                        outLayer = new OutLayer(sizeOUT, hiddenLayer[i].Size, hiddenLayer[i], eps, alpha);
-                        break;
-                    }
-                    else hiddenLayer[i] = new HiddenLayer(sizeHidden[i], sizeIN, inLayer, hiddenLayer[q], eps, alpha);
-                }
-                else
+                hiddenLayer = new HiddenLayer[sizeHidden.Length];
+                for (int i = 0; i < sizeHidden.Length; i++)
+                    hiddenLayer[i] = new HiddenLayer(sizeHidden[i], eps, alpha);
+            }
+            outLayer = new OutLayer(sizeOUT, eps, alpha);
+
+            if (sizeHidden == null)
+            {
+                inLayer.ConfigureNeurons(outLayer);
+                outLayer.ConfigureNeurons(inLayer);
+            }
+            else
+            if (sizeHidden.Length == 1)
+            {
+                inLayer.ConfigureNeurons(hiddenLayer[0]);
+                hiddenLayer[0].ConfigureNeurons(inLayer, outLayer);
+                outLayer.ConfigureNeurons(hiddenLayer[0]);
+            }
+            else
+            {
+                inLayer.ConfigureNeurons(hiddenLayer[0]);
+                for (int i = 0, j = -1, q = 1; i < hiddenLayer.Length; i++, j++, q++)
                 {
                     if (q == hiddenLayer.Length)
                     {
-                        hiddenLayer[i] = new HiddenLayer(sizeHidden[i], hiddenLayer[j].Size, hiddenLayer[j], outLayer, eps, alpha);
-                        outLayer = new OutLayer(sizeOUT, hiddenLayer[i].Size, hiddenLayer[i], eps, alpha);
-                        break;
+                        hiddenLayer[i].ConfigureNeurons(hiddenLayer[j], outLayer);
+                        outLayer.ConfigureNeurons(hiddenLayer[i]);
                     }
-                    else hiddenLayer[i] = new HiddenLayer(sizeHidden[i], hiddenLayer[j].Size, hiddenLayer[j], hiddenLayer[q], eps, alpha);
+                    else
+                    {
+                        if (i == 0) hiddenLayer[i].ConfigureNeurons(inLayer, hiddenLayer[q]);
+                        else hiddenLayer[i].ConfigureNeurons(hiddenLayer[j], hiddenLayer[q]);
+                    }
                 }
             }
+
+
+
+
+
+            //for (int i = 0, j = -1, q = 1; i < hiddenLayer.Length; i++, j++, q++)
+            //{
+            //    if (i == 0)
+            //    {
+            //        if (hiddenLayer.Length == 1)
+            //        {
+            //            hiddenLayer[i] = new HiddenLayer(sizeHidden[i], sizeIN, inLayer, outLayer, eps, alpha);
+            //            outLayer = new OutLayer(sizeOUT, hiddenLayer[i].Size, hiddenLayer[i], eps, alpha);
+            //            break;
+            //        }
+            //        else hiddenLayer[i] = new HiddenLayer(sizeHidden[i], sizeIN, inLayer, hiddenLayer[q], eps, alpha);
+            //    }
+            //    else
+            //    {
+            //        if (q == hiddenLayer.Length)
+            //        {
+            //            hiddenLayer[i] = new HiddenLayer(sizeHidden[i], hiddenLayer[j].Size, hiddenLayer[j], outLayer, eps, alpha);
+            //            outLayer = new OutLayer(sizeOUT, hiddenLayer[i].Size, hiddenLayer[i], eps, alpha);
+            //            break;
+            //        }
+            //        else hiddenLayer[i] = new HiddenLayer(sizeHidden[i], hiddenLayer[j].Size, hiddenLayer[j], hiddenLayer[q], eps, alpha);
+            //    }
+            //}
         }
 
         public double[] Calculate(params double[] inputSignal)
@@ -85,7 +127,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
             double globalError = RequiredErrorSize + 1;
             int Epoch = 0;
 
-            while (globalError > RequiredErrorSize)
+            while (globalError >= RequiredErrorSize)
             {
                 globalError = 0;
                 Epoch++;
@@ -99,7 +141,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
                 }
                 globalError = CalculateError();
                 lock (locker)
-                    LogString.Add("Эпоха: " + Epoch.ToString() + " размер ошибки: " + globalError.ToString() + "\n");
+                    LogString.Add("Эпоха: " + Epoch.ToString() + " размер ошибки: " + globalError.ToString() +" необходимый размер: " + RequiredErrorSize.ToString() + "\n");
             }
             lock (locker)
                 LogString.Add("Нейронная сеть успешно обучилась за " + Epoch.ToString() + " эпох.\n");
@@ -107,6 +149,9 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
 
         private double CalculateError()
         {
+            lock (locker)
+                LogString.Add("Размер локальных ошибок после прохождения всех сетов:\n");
+
             double returnErrorValue = 0;
             double tempLocalErrorValue;
             double[] tempAnswerNetwork;
@@ -118,6 +163,8 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
                 {
                     tempLocalErrorValue = Math.Pow((dataToTrain.TrainSet[i].ExpectedResponse[j] - tempAnswerNetwork[j]), 2) / dataToTrain.TrainSet.Count;
                     returnErrorValue += tempLocalErrorValue;
+                    lock (locker) // TEst
+                        LogString.Add("\tОбучающий сет: " + (i + 1) + " размер локальной ошибки: " + tempLocalErrorValue + "\n");
                 }
             }
             return returnErrorValue;
@@ -137,7 +184,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3
         {
             string returnSrting = "";
 
-            for (int i = 0 , j = 1; i < hiddenLayer.Length; i++, j++)
+            for (int i = 0, j = 1; i < hiddenLayer.Length; i++, j++)
             {
                 returnSrting += hiddenLayer[i].Size.ToString();
                 if (j != hiddenLayer.Length) returnSrting += ";";
