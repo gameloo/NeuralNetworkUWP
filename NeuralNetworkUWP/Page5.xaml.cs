@@ -86,7 +86,7 @@ namespace NeuralNetworkUWP
 
             var newFile = await fileSavePicker.PickSaveFileAsync();
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(MLP));
             StringWriter stringWriter = new StringWriter();
             xmlSerializer.Serialize(stringWriter, network);
 
