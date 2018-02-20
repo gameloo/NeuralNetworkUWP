@@ -19,7 +19,8 @@ namespace NeuralNetworkUWP
     public sealed partial class Page3 : Page
     {
         DataToTrain dataToTrain;
-        MLP network;
+        //MLP network;
+        NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP network;
 
         public Page3()
         {
@@ -42,42 +43,45 @@ namespace NeuralNetworkUWP
             BoxAlpha.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray);
             BoxEps.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray);
             BoxError.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray);
-            try
-            {
-                network = new MLP(dataToTrain, TextToIntArray(BoxHidden.Text));
-            }
-            catch
-            {
-                BoxHidden.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                return;
-            }
-            try
-            {
-                network.Alpha = Convert.ToDouble(BoxAlpha.Text);
-            }
-            catch
-            {
-                BoxAlpha.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                return;
-            }
-            try
-            {
-                network.Epsilon = Convert.ToDouble(BoxEps.Text);
-            }
-            catch
-            {
-                BoxEps.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                return;
-            }
-            try
-            {
-                network.Error = Convert.ToDouble(BoxError.Text);
-            }
-            catch
-            {
-                BoxError.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
-                return;
-            }
+            //try
+            //{
+                //network = new MLP(dataToTrain, TextToIntArray(BoxHidden.Text));
+                network = new NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP(dataToTrain, Convert.ToDouble(BoxEps.Text), Convert.ToDouble(BoxAlpha.Text), TextToIntArray(BoxHidden.Text));
+            //}
+            //catch
+            //{
+            //    BoxHidden.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    return;
+            //}
+            //try
+            //{
+            //    //network.Alpha = Convert.ToDouble(BoxAlpha.Text);
+            //}
+            //catch
+            //{
+            //    BoxAlpha.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    return;
+            //}
+            //try
+            //{
+            //    //network.Epsilon = Convert.ToDouble(BoxEps.Text);
+            //}
+            //catch
+            //{
+            //    BoxEps.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    return;
+            //}
+            //try
+            //{
+            //    //network.Error = Convert.ToDouble(BoxError.Text);
+            //    network.RequiredErrorSize = Convert.ToDouble(BoxError.Text);
+            //}
+            //catch
+            //{
+            //    BoxError.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Red);
+            //    return;
+            //}
+            network.RequiredErrorSize = Convert.ToDouble(BoxError.Text);
             Frame.Navigate(typeof(Page4), network);
         }
 

@@ -18,7 +18,9 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3.Neuron
 
         public void Learning()
         {
-            if (nextLayer.Equals(typeof(HiddenLayer)))
+            Type typeNextLayer = nextLayer.GetType();
+
+            if (typeNextLayer.Equals(typeof(HiddenLayer)))
             {
                 var tempLayer = (HiddenLayer)nextLayer;
                 for (int i = 0; i < tempLayer.Neuron.Length; i++)

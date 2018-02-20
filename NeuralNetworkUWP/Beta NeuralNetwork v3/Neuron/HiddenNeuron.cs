@@ -19,8 +19,10 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3.Neuron
 
         public void Learning()
         {
+            Type typeNextLayer = nextLayer.GetType();
+
             double MultiplyDeltaSynapse = 0;
-            if (nextLayer.Equals(typeof(HiddenLayer)))
+            if (typeNextLayer.Equals(typeof(HiddenLayer)))
             {
                 var tempLayer = (HiddenLayer)nextLayer;
                 for (int i = 0; i < tempLayer.Neuron.Length; i++)
@@ -35,7 +37,7 @@ namespace NeuralNetworkUWP.Beta_NeuralNetwork_v3.Neuron
 
             Delta = (1 - Axon) * Axon * MultiplyDeltaSynapse;
 
-            if (nextLayer.Equals(typeof(HiddenLayer)))
+            if (typeNextLayer.Equals(typeof(HiddenLayer)))
             {
                 var tempLayer = (HiddenLayer)nextLayer;
                 for (int i = 0; i < tempLayer.Neuron.Length; i++)

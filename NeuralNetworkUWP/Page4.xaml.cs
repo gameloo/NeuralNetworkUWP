@@ -19,7 +19,8 @@ namespace NeuralNetworkUWP
 {
     public sealed partial class Page4 : Page
     {
-        MLP network;
+        //MLP network;
+        NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP network;
         Task threadLearning;
 
 
@@ -31,7 +32,9 @@ namespace NeuralNetworkUWP
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
-                network = (MLP)e.Parameter;
+                //network = (MLP)e.Parameter;
+                network = (NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP)e.Parameter;
+
             threadLearning = new Task(() => network.Learning());
             threadLearning.Start();
             Task.Run(() => LoopLog());

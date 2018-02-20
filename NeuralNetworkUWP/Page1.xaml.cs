@@ -23,7 +23,8 @@ namespace NeuralNetworkUWP
 {
     public sealed partial class Page1 : Page
     {
-        MLP network;
+        //MLP network;
+        NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP network;
 
         public Page1()
         {
@@ -51,7 +52,8 @@ namespace NeuralNetworkUWP
                  {
                      string serializedMLP = await FileIO.ReadTextAsync(file);
                      var stringReader = new StringReader(serializedMLP);
-                     network = (MLP)xmlSerializer.Deserialize(stringReader);
+                     //network = (MLP)xmlSerializer.Deserialize(stringReader);
+                     network = (NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP)xmlSerializer.Deserialize(stringReader);
                  });
                 TbNumIN.Text = network.sizeIN.ToString();
                 TbNumOUT.Text = network.sizeOUT.ToString();

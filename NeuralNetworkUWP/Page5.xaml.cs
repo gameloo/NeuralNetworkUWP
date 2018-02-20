@@ -21,7 +21,8 @@ namespace NeuralNetworkUWP
 {
     public sealed partial class Page5 : Page
     {
-        MLP network;
+        //MLP network;
+        NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP network;
 
         public Page5()
         {
@@ -32,7 +33,8 @@ namespace NeuralNetworkUWP
         {
             if (e.Parameter != null)
             {
-                network = (MLP)e.Parameter;
+                //network = (MLP)e.Parameter;
+                network = (NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP)e.Parameter;
                 TbNumIN.Text = network.sizeIN.ToString();
                 TbNumOUT.Text = network.sizeOUT.ToString();
             }
@@ -85,7 +87,7 @@ namespace NeuralNetworkUWP
 
             var newFile = await fileSavePicker.PickSaveFileAsync();
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(MLP));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(NeuralNetworkUWP.Beta_NeuralNetwork_v3.MLP));
             StringWriter stringWriter = new StringWriter();
             xmlSerializer.Serialize(stringWriter, network);
 
