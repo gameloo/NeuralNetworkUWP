@@ -96,7 +96,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Beta NeuralNetwork v3\LayerNeuron.cs" />
-    <Compile Include="Beta NeuralNetwork v3\Neuron.cs" />
+    <Compile Include="Beta NeuralNetwork v3\MLP.cs" />
+    <Compile Include="Beta NeuralNetwork v3\Neuron\HiddenNeuron.cs" />
+    <Compile Include="Beta NeuralNetwork v3\Neuron\InNeuron.cs" />
+    <Compile Include="Beta NeuralNetwork v3\Neuron\Neuron.cs" />
+    <Compile Include="Beta NeuralNetwork v3\Neuron\OutNeuron.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
